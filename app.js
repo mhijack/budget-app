@@ -96,6 +96,7 @@ const budgetController = (() => {
 
 // ================ UI CONTROLLER ================
 const UIController = (() => {
+  // DOM classes for element selection
 	const DOMStrings = {
 		inputType: '.add__type',
 		inputDescription: '.add__description',
@@ -133,7 +134,7 @@ const UIController = (() => {
 			: (document.querySelector(DOMStrings.percentageLabel).textContent = '---');
 	};
 
-	// add new item to DOM list
+	// Add new item to DOM list
 	const addListItem = (obj, type) => {
 		let html, newHtml, element;
 		// Create HTML string with placeholder text
@@ -154,6 +155,7 @@ const UIController = (() => {
 		document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 	};
 
+  // Retrieve user input
 	const getInput = () => {
 		return {
 			// check if inc(rement) or exp(ense)
@@ -165,6 +167,7 @@ const UIController = (() => {
 		};
 	};
 
+  // Expose DOM strings to public
 	const getDOMStrings = () => {
 		return DOMStrings;
 	};
