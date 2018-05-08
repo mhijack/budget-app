@@ -42,6 +42,17 @@ const BudgetController = (() => {
 		return sum;
 	};
 
+	// Delete item from data structure
+	public.deleteItem = (id, type) => {
+		// 1. Loop through data.allItems[type]
+		data.allItems[type] = data.allItems[type].filter((item, index) => {
+			// 2. If id ==== item.id, filter out
+			if (item.id !== parseFloat(id)) {
+				return item;
+			}
+		})
+	}
+
 	// Add new Expense or Income into data structure
 	public.addItem = (typ, desc, val) => {
 		let newItem, ID;

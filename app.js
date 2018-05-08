@@ -12,7 +12,8 @@ const Controller = ((budgetCtrl, UICtrl) => {
 			percentage: 0
 		});
 		console.log('Application started');
-	};
+  };
+
 	// setup EventListeners
 	const setupEventListeners = () => {
 		document.querySelector(DOMStrings.inputBtn).addEventListener('click', ctrlAddItem);
@@ -21,7 +22,10 @@ const Controller = ((budgetCtrl, UICtrl) => {
 			if (event.keyCode === 13 || event.which === 13) {
 				ctrlAddItem();
 			}
-		});
+    });
+
+    // event listener for delete btn
+    document.querySelector(DOMStrings.container).addEventListener('click', ctrlDeleteItem);
 	};
 
 	const updateBudget = () => {
@@ -32,6 +36,25 @@ const Controller = ((budgetCtrl, UICtrl) => {
 		// 3. Display the budget on UI
 		UICtrl.displayBudget(budget);
 	};
+
+  const ctrlDeleteItem = event => {
+    let itemID, splitID, type, ID;
+
+    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+    // Only proceed if ID is defined (clicked on delete button)
+    if (itemID) {
+      // 'inc-1'
+      splitID = itemID.split('-')
+      type = splitID[0];
+      ID = splitID[1];
+      // 1. Delete item from data structure
+      budgetCtrl.deleteItem(ID, type);
+      // 2. Delete item from UI
+      UICtrl.deleteListItem(itemID);
+      // 3. Update and show new budget
+      updateBudget();
+    }
+  }
 
 	// stores DOMStrings
 	const DOMStrings = UICtrl.getDOMStrings();

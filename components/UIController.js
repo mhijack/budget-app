@@ -13,7 +13,8 @@ const UIController = (() => {
 		budgetLabel: '.budget__value',
 		incomeLabel: '.budget__income--value',
 		expenseLabel: '.budget__expenses--value',
-		percentageLabel: '.budget__expenses--percentage'
+		percentageLabel: '.budget__expenses--percentage',
+		container: '.container',
 	};
 
 	// Expose DOM strings to public
@@ -40,11 +41,11 @@ const UIController = (() => {
 		if (type === 'inc') {
 			element = DOMStrings.incomeContainer;
 			html =
-				'<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">+ %value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline" /></button></div></div></div>';
+				'<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">+ %value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline" /></button></div></div></div>';
 		} else if (type === 'exp') {
 			element = DOMStrings.expenseContainer;
 			html =
-				'<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">- %value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+				'<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">- %value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
 		}
 		// Replace placeholder text with data from obj
 		newHtml = html.replace('%id%', obj.id);
@@ -53,6 +54,12 @@ const UIController = (() => {
 		// Insert HTML into DOM
 		document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 	};
+
+	// Delete list item
+	public.deleteListItem = (selectorID) => {
+		// Use element.removeChild()
+		document.getElementById(selectorID).parentNode.removeChild(document.getElementById(selectorID));
+	}
 
 	// clear input field
 	public.clearFields = () => {
