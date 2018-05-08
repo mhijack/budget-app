@@ -1,5 +1,5 @@
 // ================ GLOBAL CONTROLLER ================
-const controller = ((budgetCtrl, UICtrl) => {
+const Controller = ((budgetCtrl, UICtrl) => {
 	// initialization function
 	const init = () => {
     setupEventListeners();
@@ -24,9 +24,9 @@ const controller = ((budgetCtrl, UICtrl) => {
 
 	const updateBudget = () => {
 		// 1. Calculate the budget
-		budgetController.calculateBudget();
+		BudgetController.calculateBudget();
 		// 2. Return the budget
-		const budget = budgetController.getBudget();
+		const budget = BudgetController.getBudget();
 		// 3. Display the budget on UI
 		UICtrl.displayBudget(budget);
 	};
@@ -55,6 +55,6 @@ const controller = ((budgetCtrl, UICtrl) => {
 		init
 		// ctrlAddItem
 	};
-})(budgetController, UIController);
+})(BudgetController, UIController);
 
-controller.init();
+Controller.init();
