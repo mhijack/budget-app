@@ -1,7 +1,9 @@
 // ================ GLOBAL CONTROLLER ================
 const Controller = ((budgetCtrl, UICtrl) => {
+  const public = {};
+
 	// initialization function
-	const init = () => {
+	public.init = () => {
     setupEventListeners();
     UICtrl.displayBudget({
 			budget: 0,
@@ -51,10 +53,7 @@ const Controller = ((budgetCtrl, UICtrl) => {
 		}
 	};
 
-	return {
-		init
-		// ctrlAddItem
-	};
+	return public;
 })(BudgetController, UIController);
 
 Controller.init();
