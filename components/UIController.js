@@ -15,6 +15,7 @@ const UIController = (() => {
 		expenseLabel: '.budget__expenses--value',
 		percentageLabel: '.budget__expenses--percentage',
 		container: '.container',
+		expensesPercentageLabel: '.item__percentage',
 	};
 
 	// Expose DOM strings to public
@@ -84,6 +85,20 @@ const UIController = (() => {
 			(document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%') :
 			(document.querySelector(DOMStrings.percentageLabel).textContent = '---');
 	};
+
+	public.displayPercentages = percentages => {
+		const fields = document.querySelectorAll(DOMStrings.expensesPercentageLabel);
+
+		// nodeListForEach(fields, () => {}))
+		const nodeListForEach = (pseudoArr, callback) => {
+			for (let i = 0, n = pseudoArr.length; i < n; i += 1) {
+				callback(pseudoArr[i], i);
+			}
+		}
+		nodeListForEach(fields, (field, index) => {
+			field.textContent = percentages[index] > 0 ? percentages[index] + '%' : '---';
+		})
+	}
 
 	return public;
 })();

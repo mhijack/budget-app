@@ -7,6 +7,15 @@ const BudgetController = (() => {
 			this.id = id;
 			this.description = description;
 			this.value = value;
+			this.percentage = -1;
+		}
+
+		calcPercentage(totalIncome) {
+			totalIncome > 0 ? this.percentage = Math.round((this.value / totalIncome) * 100) : this.percentage = -1;
+		}
+
+		getPercentage() {
+			return this.percentage;
 		}
 	}
 
@@ -83,6 +92,19 @@ const BudgetController = (() => {
 			(data.percentage = Math.round(data.totals.exp / data.totals.inc * 100)) :
 			(data.percentage = -1);
 	};
+
+	public.calculatePercentages = () => {
+		data.allItems['exp'].forEach(item => {
+			item.calcPercentage(data.totals.inc);
+		})
+	}
+
+	public.getPercentages = () => {
+		const allPerc = data.allItems['exp'].map(item => {
+			return item.getPercentage();
+		});
+		return allPerc;
+	}
 
 	public.getBudget = () => {
 		return {

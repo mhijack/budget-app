@@ -37,6 +37,15 @@ const Controller = ((budgetCtrl, UICtrl) => {
 		UICtrl.displayBudget(budget);
 	};
 
+  const updatePercentages = () => {
+    // 1. Calculate percentage
+    budgetCtrl.calculatePercentages();
+    // 2. Read percentages from budgetController
+    const percentages = budgetCtrl.getPercentages();
+    // 3. Update UI
+    UICtrl.displayPercentages(percentages);
+  }
+
   const ctrlDeleteItem = event => {
     let itemID, splitID, type, ID;
 
@@ -53,6 +62,8 @@ const Controller = ((budgetCtrl, UICtrl) => {
       UICtrl.deleteListItem(itemID);
       // 3. Update and show new budget
       updateBudget();
+      // 4. Calculate and update percentages
+      updatePercentages();
     }
   }
 
@@ -72,7 +83,9 @@ const Controller = ((budgetCtrl, UICtrl) => {
 			// 4. Clear input fields
 			UICtrl.clearFields();
 			// 5. Calculate and update budget
-			updateBudget();
+      updateBudget();
+      // 6. Calculate and update percentages
+      updatePercentages();
 		}
 	};
 
