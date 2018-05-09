@@ -16,7 +16,46 @@ const UIController = (() => {
 		percentageLabel: '.budget__expenses--percentage',
 		container: '.container',
 		expensesPercentageLabel: '.item__percentage',
+		dateLabel: '.budget__title--month',
+		redFocus: 'red-focus',
 	};
+
+	const formatNumber = (num, type) => {
+		let numSplit, int, dec;
+		// + or - before number
+		// exactly 2 decimal points
+		// comma separating thousands
+		// 2310.4567 -> + 2,310.46
+		// 2000 -> 2,000.00
+
+		num = Math.abs(num);
+		num = num.toFixed(2);
+		numSplit = num.split('.');
+		int = numSplit[0];
+		dec = numSplit[1];
+		if (int.length > 3) {
+			int = int.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+		}
+		type === 'inc' ? int = '+ ' + int : int = '- ' + int;
+		return int + '.' + dec;
+	}
+
+	// nodeListForEach(fields, () => {}))
+	public.nodeListForEach = (pseudoArr, callback) => {
+		for (let i = 0, n = pseudoArr.length; i < n; i += 1) {
+			callback(pseudoArr[i], i);
+		}
+	}
+
+	public.displayMonth = () => {
+		let now, months, month, year;
+		now = new Date();
+		months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		month = now.getMonth();
+		year = now.getFullYear();
+
+		document.querySelector(DOMStrings.dateLabel).textContent = months[month] + ', ' + year;
+	}
 
 	// Expose DOM strings to public
 	public.getDOMStrings = () => {
@@ -42,16 +81,16 @@ const UIController = (() => {
 		if (type === 'inc') {
 			element = DOMStrings.incomeContainer;
 			html =
-				'<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">+ %value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline" /></button></div></div></div>';
+				'<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline" /></button></div></div></div>';
 		} else if (type === 'exp') {
 			element = DOMStrings.expenseContainer;
 			html =
-				'<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">- %value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+				'<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
 		}
 		// Replace placeholder text with data from obj
 		newHtml = html.replace('%id%', obj.id);
 		newHtml = newHtml.replace('%description%', obj.description);
-		newHtml = newHtml.replace('%value%', obj.value);
+		newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
 		// Insert HTML into DOM
 		document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
 	};
@@ -78,9 +117,13 @@ const UIController = (() => {
 
 	// Display budget
 	public.displayBudget = obj => {
-		document.querySelector(DOMStrings.budgetLabel).textContent = obj.budget;
-		document.querySelector(DOMStrings.incomeLabel).textContent = obj.totalInc;
-		document.querySelector(DOMStrings.expenseLabel).textContent = obj.totalExp;
+		let type;
+
+		obj.budget >= 0 ? type = 'inc' : type = 'exp';
+
+		document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+		document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+		document.querySelector(DOMStrings.expenseLabel).textContent = formatNumber(obj.totalExp, 'exp');
 		obj.percentage > 0 ?
 			(document.querySelector(DOMStrings.percentageLabel).textContent = obj.percentage + '%') :
 			(document.querySelector(DOMStrings.percentageLabel).textContent = '---');
@@ -89,12 +132,6 @@ const UIController = (() => {
 	public.displayPercentages = percentages => {
 		const fields = document.querySelectorAll(DOMStrings.expensesPercentageLabel);
 
-		// nodeListForEach(fields, () => {}))
-		const nodeListForEach = (pseudoArr, callback) => {
-			for (let i = 0, n = pseudoArr.length; i < n; i += 1) {
-				callback(pseudoArr[i], i);
-			}
-		}
 		nodeListForEach(fields, (field, index) => {
 			field.textContent = percentages[index] > 0 ? percentages[index] + '%' : '---';
 		})
