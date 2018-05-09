@@ -132,7 +132,7 @@ const UIController = (() => {
 	public.displayPercentages = percentages => {
 		const fields = document.querySelectorAll(DOMStrings.expensesPercentageLabel);
 
-		nodeListForEach(fields, (field, index) => {
+		this.nodeListForEach(fields, (field, index) => {
 			field.textContent = percentages[index] > 0 ? percentages[index] + '%' : '---';
 		})
 	}
